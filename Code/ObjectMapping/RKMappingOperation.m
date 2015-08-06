@@ -297,10 +297,6 @@ static NSArray *RKInsertInMetadataList(NSArray *list, id metadata1, id metadata2
     if (firstChar == 's' && [key isEqualToString:RKSelfKey]) {
         return _object;
     } else if (firstChar != '@') {
-        //vic:fix bug "[{}]" but " "--crash
-        if (![_object isKindOfClass:[NSDictionary class]]) {
-            return nil;
-        }
         return [_object valueForKey:key];
     } else if ([key isEqualToString:RKMetadataKey]) {
         return [[RKMetadataWrapper alloc] initWithMappingSource:self];
@@ -325,6 +321,10 @@ static NSArray *RKInsertInMetadataList(NSArray *list, id metadata1, id metadata2
         NSString *selfKeyPath = [keyPath substringFromIndex:[RKSelfKeyPathPrefix length]];
         return [_object valueForKeyPath:selfKeyPath];
     } else if (firstChar != '@') {
+        //vic:fix bug "[{}]" but " "--crash
+        if (![_object isKindOfClass:[NSDictionary class]]) {
+            return nil;
+        }
         return [_object valueForKeyPath:keyPath];
     } else if ([keyPath hasPrefix:RKMetadataKeyPathPrefix]) {
         NSString *metadataKeyPath = [keyPath substringFromIndex:[RKMetadataKeyPathPrefix length]];
